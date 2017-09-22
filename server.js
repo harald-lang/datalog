@@ -10,7 +10,7 @@ var express = require('express'),
 
 // read configuration file
 var config = JSON.parse(fs.readFileSync('config.json','utf8')); 
-    
+
 var app = express();
 
 // serve static content from the 'static' directory
@@ -34,16 +34,23 @@ var counter = 0;
 
 // Datalog REST service
 app.post('/datalog', function (req, res) {
+  // log all queries
+  var logFile = config.tempDirectory + '/log-' + counter + '.dl';
+  fs.writeFile(logFile, req.body.ruleset + "\n" + req.body.query, function(err) {
+    if(err) {
+      console.log(err);
+    }
+  });
 
   // validate user input
   // WARNING: Don't allow forward slashes!
   req.assert('ruleset', 'required').notEmpty();
   req.assert('ruleset', 'max. 4096 characters allowed').len(0, 4096);
-  req.assert('ruleset', 'ruleset contains unallowed characters').matches(/^[\[\]_=':\-\+<>\ \\a-zA-Z0-9\%\n\r(),;\.\t]+$/);
+  req.assert('ruleset', 'ruleset contains unallowed characters').matches(/^([_=:'\-\+<>\s\w\d\n\(\)%,;\.]|\\=)+$/);
 
   req.assert('query', 'required').notEmpty();
   req.assert('query', 'max. 1024 characters allowed').len(0, 1024);
-  req.assert('query', 'query contains unallowed characters').matches(/^[_[\[\]=':\-\+<>\ \\a-zA-Z0-9\%\n\r(),;\.\t]+$/);
+  req.assert('query', 'query contains unallowed characters').matches(/^[_='\-\+\w\d\s(),\.]+$/);
 
   var validationErrors = req.validationErrors();
   if (validationErrors) {
@@ -106,11 +113,7 @@ app.post('/datalog', function (req, res) {
   desProcess.stdin.write('/consult ' + tempFile + '\n');
  
 	// transform query into a single line string
-  var queryLines = req.body.query.split(/\n/);
-  var query = "";
-  queryLines.forEach(function(line) {
-  	query += line + " ";
-  });
+  var query = req.body.query.replace(/\n/,' ');
 	console.log("Executing query " + counter + ": " + query);
 
   // submit query
