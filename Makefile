@@ -5,7 +5,7 @@ all: $(JS_FILES) $(HANDLEBARS_FILES) $(JADE_FILES)
 
 public/%.html: views/%.jade $(wildcard views/*.jade views/*/*.jade)
 	@mkdir -p $(dir $@)
-	./node_modules/jade/bin/jade -o $(dir $@) $<
+	./node_modules/jade/bin/jade.js -o $(dir $@) $<
 
 public/%.js: src/%.coffee
 	@mkdir -p $(dir $@)

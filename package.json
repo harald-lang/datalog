@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "express": "4.x",
-    "express-validator" : "*",
+    "express-validator" : "3.x",
     "body-parser": "*",
     "jade": "*",
     "coffee-script": "*",
