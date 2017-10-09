@@ -35,12 +35,12 @@ var counter = 0;
 // Datalog REST service
 app.post('/datalog', function (req, res) {
   // log all queries
-  var logFile = config.tempDirectory + '/log-' + counter + '.dl';
-  fs.writeFile(logFile, req.body.ruleset + "\n" + req.body.query, function(err) {
-    if(err) {
-      console.log(err);
-    }
-  });
+  //var logFile = config.tempDirectory + '/log-' + counter + '.dl';
+  //fs.writeFile(logFile, req.body.ruleset + "\n" + req.body.query, function(err) {
+  //  if(err) {
+  //    console.log(err);
+  //  }
+  //});
 
   // validate user input
   // WARNING: Don't allow forward slashes!

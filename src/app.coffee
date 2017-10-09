@@ -39,7 +39,6 @@ class App
 	example: (event)=>
 		@editor.setValue($(event.currentTarget).attr('data-ruleset'))
 		@query.setValue($(event.currentTarget).attr('data-query'))
-		@execute()
 		true
 
 new App
